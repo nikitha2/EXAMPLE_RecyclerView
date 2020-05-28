@@ -13,18 +13,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 class customAdaptor extends androidx.recyclerview.widget.RecyclerView.Adapter {
+     private static ListItemClickListener mClickListener = null;
+
     ArrayList<ListItems> items;
     int i=0;
-    public customAdaptor(ArrayList<ListItems> items) {
+    public customAdaptor(ArrayList<ListItems> items,ListItemClickListener mClickListener) {
         this.items=items;
+       this.mClickListener=mClickListener;
     }
-
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public interface ListItemClickListener{
+        void onListItemClick(int position);
+    }
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
         public View v;
+
         public MyViewHolder(View v) {
             super(v);
             this.v = v;
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position=getAdapterPosition();
+            mClickListener.onListItemClick(position);
         }
     }
 
@@ -49,12 +62,12 @@ class customAdaptor extends androidx.recyclerview.widget.RecyclerView.Adapter {
         TextView textView1=(TextView) holder.itemView.findViewById(R.id.textView1);
         textView1.setText(currentword.text1);
         holder.itemView.setTag(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(),"showing item: "+ v.getTag(),Toast.LENGTH_LONG).show();
-            }
-        });
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(v.getContext(),"showing item: "+ v.getTag(),Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
     @Override

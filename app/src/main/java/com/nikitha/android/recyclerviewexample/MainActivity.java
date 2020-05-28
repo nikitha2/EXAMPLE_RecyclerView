@@ -5,13 +5,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements customAdaptor.ListItemClickListener {
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<ListItems> data=new ArrayList<>();
+    Toast mtoast=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +42,22 @@ public class MainActivity extends AppCompatActivity {
         data.add(new ListItems("asf19","adfds19"));
 
         RecyclerView recyclerView=(RecyclerView) findViewById(R.id.recyclerview);
-        adapter=new customAdaptor(data);
+        adapter=new customAdaptor(data,this);
         layoutManager=new LinearLayoutManager(this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public void onListItemClick(int position) {
+        if(mtoast!=null){
+            mtoast.cancel();
+        }
+        String toastMessage = "Item #" + position + " clicked.";
+        mtoast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
+
+        mtoast.show();
     }
 }
